@@ -18,6 +18,17 @@ describe Github::Auth::KeysFile do
       it 'has a default path' do
         expect(subject.path).to_not be_nil
       end
+
+      context 'when root' do
+        it 'should not have a default path' do
+          Github::Auth::KeysFile.new.stub!(:is_root?){ true }
+
+          expect(subject.path).to be_nil
+        end
+
+        it "Should have the root path excluded"
+      end
+
     end
 
     context 'with a custom path' do

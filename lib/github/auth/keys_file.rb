@@ -9,7 +9,8 @@ module Github::Auth
     DEFAULT_PATH = '~/.ssh/authorized_keys'
 
     def initialize(options = {})
-      @path = File.expand_path(options[:path] || DEFAULT_PATH)
+      default  = is_root? ? nil : DEFAULT_PATH
+      @path = File.expand_path(options[:path] || default)
     end
 
     def write!(keys)
@@ -21,6 +22,10 @@ module Github::Auth
           end
         end
       end
+    end
+
+    def is_root?
+      Process.euid
     end
 
     def delete!(keys)
