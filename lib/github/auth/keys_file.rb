@@ -11,6 +11,7 @@ module Github::Auth
     def initialize(options = {})
       default  = is_root? ? nil : DEFAULT_PATH
       @path = File.expand_path(options[:path] || default)
+      # exit(1) if is_root?
     end
 
     def write!(keys)
