@@ -9,9 +9,18 @@ module Github::Auth
     DEFAULT_PATH = '~/.ssh/authorized_keys'
 
     def initialize(options = {})
-      default  = is_root? ? nil : DEFAULT_PATH
-      @path = File.expand_path(options[:path] || default)
-      # exit(1) if is_root?
+      path = options[:path] || DEFAULT_PATH
+      set_path(path)
+    end
+
+    def set_path(path)
+      error_quit ("Epic Fail") if is_root? && path == DEFAULT_PATH
+      @path = File.expand_path(path)
+    end
+
+    def error_quit(message = "Unhandled")
+      puts message
+      exit 1
     end
 
     def write!(keys)
@@ -26,7 +35,7 @@ module Github::Auth
     end
 
     def is_root?
-      Process.euid
+      Process.euid == 0
     end
 
     def delete!(keys)

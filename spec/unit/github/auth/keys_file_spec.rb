@@ -20,10 +20,21 @@ describe Github::Auth::KeysFile do
       end
 
       context 'when root' do
-        it 'should not have a default path' do
-          Github::Auth::KeysFile.new.stub!(:is_root?){ true }
 
-          expect(subject.path).to be_nil
+        before do
+          Github::Auth::KeysFile.any_instance.stub(:is_root?){ true }
+          Github::Auth::KeysFile.any_instance.stub(:error_quit){ puts "Error quit called" }
+        end
+
+        it 'should not have a default path' do
+          keyfile = Github::Auth::KeysFile.new
+          keyfile.should_receive(:error_quit)
+          keyfile.error_quit
+          #when_root = Github::Auth::KeysFile.new
+          # expect(subject).should_receive(:path)
+          #Kernel.should_receive(:exit)
+
+
         end
 
         it "Should have the root path excluded"
